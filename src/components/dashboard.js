@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, logout } from '../firebase';
+import { auth, db, logout, storage } from '../firebase';
+import { query, collection, where, getDocs } from 'firebase/firestore';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 function Dashboard() {
   const [user, loading, error] = useAuthState(auth);
   const [name, setName] = useState('');
+  const [letter, setLetter] = useState(null);
+
   const navigate = useNavigate();
+
+  const fetchUserNames = async () => {
+    try {
+      const q = query(collection(db, 'users'), where('email', '==', user.email));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
+      setName(data.name);
+    } catch (error) {
+      console.log(error);
+      alert('Error fetching user data');
+    }
+  };
 
   useEffect(() => {
     if (loading) return;
@@ -14,8 +30,14 @@ function Dashboard() {
     fetchUserNames();
   }, [user, loading]);
 
+  useEffect(() => {
+    getDownloadURL(ref(storage, name+".pdf")).then((url) => {
+      setLetter(url);
+    })
+  },[])
+
   return (
-    <div className="grid h-screen place-items-center">
+    <div className="h-screen">
       <div className="bg-white p-10 rounded-lg shadow-2xl">
         <h1 className="text-3xl font-bold mb-5">Dashboard</h1>
         <h2 className="text-xl font-medium mb-5">Welcome {name}</h2>
@@ -26,9 +48,7 @@ function Dashboard() {
           Logout
         </button>
       </div>
-      <object data="../letters/{name}">
-
-      </object>
+      <embed type="application/pdf" src={letter} width="100%" height="100%" />
     </div>
   );
 }
