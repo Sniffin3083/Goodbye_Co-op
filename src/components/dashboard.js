@@ -20,7 +20,6 @@ function Dashboard() {
       setName(data.name);
     } catch (error) {
       console.log(error);
-      alert('Error fetching user data');
     }
   };
 
@@ -28,13 +27,13 @@ function Dashboard() {
     if (loading) return;
     if (!user) navigate('/');
     fetchUserNames();
-  }, [user, loading]);
+  }, [user, loading, navigate, fetchUserNames]);
 
   useEffect(() => {
-    getDownloadURL(ref(storage, name+".pdf")).then((url) => {
+    getDownloadURL(ref(storage, name + ".pdf")).then((url) => {
       setLetter(url);
     })
-  },[])
+  },[name])
 
   return (
     <div className="h-screen">
