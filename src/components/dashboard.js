@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, logout, storage } from '../firebase';
+import { auth, db, logout, storage } from '../config/firebase';
 import { query, collection, where, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref } from 'firebase/storage';
 
@@ -20,7 +20,6 @@ function Dashboard() {
       setName(data.name);
     } catch (error) {
       console.log(error);
-      alert('Error fetching user data');
     }
   };
 
@@ -28,13 +27,13 @@ function Dashboard() {
     if (loading) return;
     if (!user) navigate('/');
     fetchUserNames();
-  }, [user, loading]);
+  }, [user, loading, navigate, fetchUserNames]);
 
   useEffect(() => {
-    getDownloadURL(ref(storage, name+".pdf")).then((url) => {
+    getDownloadURL(ref(storage, name + ".pdf")).then((url) => {
       setLetter(url);
     })
-  },[])
+  },[name])
 
   return (
     <div className="h-screen">
