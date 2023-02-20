@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { auth, db, logout, storage } from '../config/firebase';
 import { query, collection, where, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref } from 'firebase/storage';
@@ -23,6 +23,15 @@ function Dashboard() {
     }
   };
 
+  const downloadLetter = async () => {
+    try {
+      const url = await getDownloadURL(ref(storage, name + ".pdf"));
+      navigate(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (loading) return;
     if (!user) navigate('/');
@@ -36,18 +45,39 @@ function Dashboard() {
   },[name])
 
   return (
-    <div className="h-screen">
-      <div className="bg-white p-10 rounded-lg shadow-2xl">
-        <h1 className="text-3xl font-bold mb-5">Dashboard</h1>
-        <h2 className="text-xl font-medium mb-5">Welcome {name}</h2>
-        <button
-          className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => logout()}
-        >
-          Logout
-        </button>
+    <div className="h-screen w-screen">
+      <div className="flex items-center">
+        <div className="py-4 px-5">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+        </div>
+        <div className="py-4 px-56">
+          <h2 className="text-xl font-medium">Welcome {name}</h2>
+        </div>
+        <div className="py-4 pl-20">
+          <button
+            className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => logout()}
+          >
+            Logout
+          </button>
+        </div>
       </div>
-      <embed type="application/pdf" src={letter} width="100%" height="100%" />
+      <div className="pl-16 mb-56 w-full h-full">
+        <embed type="application/pdf" src={letter} width="95%" height="120%"/>
+      </div>
+      <div className="p-16">
+        <p className="text-xl">
+          I hope you enjoyed your letter! Thanks again for all the support I got through out the years working with you!
+          Here is a download link to the letter if you want to save it for later.
+        </p>
+      </div>
+      <div className="grid place-items-center pb-16">
+        <Link to={letter}>
+          <button className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded">
+            Download
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
