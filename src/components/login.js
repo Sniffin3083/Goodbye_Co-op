@@ -16,33 +16,37 @@ function Login() {
 
   return (
     <div className="grid h-screen place-items-center">
-      <h1 className="font-bold text-5xl">Login</h1>
-      <div>
-        <label>Email: </label>
-        <input 
-        className="border border-solid border-slate-500 focus:border-black" 
-        type="text" 
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="example@bye.ca"
-        />
+      <div className="border border-dotted border-black rounded-xl">
+        <div className="grid place-items-center p-8">
+          <h1 className="font-bold text-5xl pb-12 pt-4">Login</h1>
+          <div className="pb-8">
+            <label className="pr-8">Email: </label>
+            <input 
+            className="pl-1 border border-solid border-slate-500 focus:border-black focus:drop-shadow-xl" 
+            type="text" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@bye.ca"
+            />
+          </div>
+          <div className="pb-8">
+            <label className="pr-1">Password: </label>
+            <input 
+            className="pl-1 border border-solid border-slate-500 focus:border-black focus:drop-shadow-xl" 
+            type="password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+            />
+          </div>
+          <button
+            className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded drop-shadow-xl"
+            onClick={() => logInWithEmailAndPassword(email, password)}
+          >
+            Login
+          </button>
+        </div>
       </div>
-      <div>
-        <label>Password: </label>
-        <input 
-        className="border border-solid border-slate-500 focus:border-black" 
-        type="password" 
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="password"
-        />
-      </div>
-      <button
-        className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => logInWithEmailAndPassword(email, password)}
-      >
-        Login
-      </button>
     </div>
   )
 }
