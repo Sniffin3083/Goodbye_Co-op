@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, logout, storage } from '../firebase';
+import { auth, db, logout, storage } from '../config/firebase';
 import { query, collection, where, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref } from 'firebase/storage';
 
